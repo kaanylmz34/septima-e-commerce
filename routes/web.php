@@ -6,9 +6,18 @@ use App\Auth\Services\LoginService;
 use App\Auth\Objects\AuthCredentialsObject;
 
 Route::get('/', function () {
-    $loginService = new LoginService();
-    $authCredentialsObject = new AuthCredentialsObject(phone: '05321235456');
-    $loginService->login($authCredentialsObject);
+
+    try
+    {
+        $loginService = new LoginService();
+        $authCredentialsObject = new AuthCredentialsObject(phone: '05321235456');
+        $loginService->login($authCredentialsObject);
+    }
+    catch (\Exception $e)
+    {
+        echo $e->getMessage();
+    }
+
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
