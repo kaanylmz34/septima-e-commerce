@@ -8,7 +8,6 @@ use App\Core\DataUnits\Rules\Str\Min;
 
 class Password extends Str
 {
-
     protected array $rules;
 
     public function __construct(string $value)
@@ -20,5 +19,4 @@ class Password extends Str
             new Min(8),
         ];
     }
-
 }

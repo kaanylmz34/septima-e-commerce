@@ -9,7 +9,7 @@ class Str extends DataUnit
 
     public function __construct(protected string $value)
     {
-        parent::__construct();
+        parent::__construct(value: $value);
     }
 
 }

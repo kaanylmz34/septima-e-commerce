@@ -7,7 +7,7 @@ use App\Auth\Objects\AuthCredentialsObject;
 
 Route::get('/', function () {
     $loginService = new LoginService();
-    $authCredentialsObject = new AuthCredentialsObject('test@test.com', 'test');
+    $authCredentialsObject = new AuthCredentialsObject(phone: '05321235456');
     $loginService->login($authCredentialsObject);
 })->name('home');
 

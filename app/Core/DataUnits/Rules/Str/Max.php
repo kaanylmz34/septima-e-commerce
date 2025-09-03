@@ -6,21 +6,18 @@ use App\Core\DataUnits\Rules\Rule;
 
 class Max extends Rule
 {
-    public function __construct(private int $max)
+
+    protected string $errorMessage;
+    protected mixed $value;
+
+    public function __construct(private int $max, ?string $errorMessage = null)
     {
-        // ...
+        $this->errorMessage = $errorMessage ?? sprintf('The string must be less than %d characters', $this->max);
     }
-    
-    public function validate(string $value): bool
+
+    public function isValid(mixed $value): bool
     {
-        $condition = strlen($value) <= $this->max;
-
-        if (!$condition)
-        {
-            throw new \Exception('The string must be less than ' . $this->max . ' characters');
-        }
-
-        return $condition;
+        return strlen($value) <= $this->max;
     }
     
 }

@@ -7,9 +7,12 @@ use App\Core\DataUnits\Exceptions\DataValidationException;
 abstract class DataUnit
 {
 
-    public function __construct(protected array $rules = [])
+    public function __construct(protected array $rules = [], mixed $value = null)
     {
-        // ...
+        if ($value)
+        {
+            $this->value = $value;
+        }
     }
     
     protected function validate()
@@ -27,7 +30,7 @@ abstract class DataUnit
         }
     }
     
-    public function get(): string
+    public function get()
     {
         try
         {
@@ -40,7 +43,7 @@ abstract class DataUnit
         }
     }
 
-    public function set(string $value): void
+    public function set(mixed $value): void
     {
         try
         {

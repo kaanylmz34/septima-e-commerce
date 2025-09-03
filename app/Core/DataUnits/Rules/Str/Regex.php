@@ -7,22 +7,19 @@ use App\Core\DataUnits\Rules\Rule;
 class Regex extends Rule
 {
 
-    public function __construct(private string $pattern)
+    protected string $errorMessage;
+    protected mixed $value;
+    protected string $pattern;
+
+    public function __construct(string $pattern, ?string $errorMessage = null)
     {
-        // ...
+        $this->pattern = $pattern;
+        $this->errorMessage = $errorMessage ?? sprintf('The string must match the regex %s', $this->pattern);
     }
 
-    public function validate(string $value): bool
+    public function isValid(mixed $value): bool
     {
-        $condition = preg_match($this->pattern, $value) === 1;
-        
-        if (!$condition)
-        {
-            throw new \Exception('The string must match the regex ' . $this->pattern);
-        }
-
-        return $condition;
+        return preg_match($this->pattern, $value) === 1;
     }
-
     
 }

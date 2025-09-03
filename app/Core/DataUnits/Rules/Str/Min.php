@@ -6,23 +6,18 @@ use App\Core\DataUnits\Rules\Rule;
 
 class Min extends Rule
 {
-    public function __construct(private int $min)
+
+    protected string $errorMessage;
+    protected mixed $value;
+
+    public function __construct(private int $min, ?string $errorMessage = null)
     {
-        // ...
+        $this->errorMessage = $errorMessage ?? sprintf('The string must be greater than %d characters', $this->min);
     }
 
-    public function validate(string $value): bool
+    public function isValid(mixed $value): bool
     {
-        $condition = strlen($value) >= $this->min;
-        
-        if (!$condition) 
-        {
-            throw new \Exception('The string must be greater than ' . $this->min . ' characters');
-        }
-
-        return $condition;
+        return strlen($value) >= $this->min;
     }
-
-
     
 }
