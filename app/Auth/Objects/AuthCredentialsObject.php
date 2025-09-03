@@ -13,6 +13,8 @@ class AuthCredentialsObject extends DataObject
 
     protected array $fields = [];
 
+    public string $method;
+
     public function __construct(...$credentials) 
     {
 
@@ -23,19 +25,25 @@ class AuthCredentialsObject extends DataObject
                 'email' => 'required|string',
                 'password' => 'required|string',
             ])->passes():
+            
                 $this->fields = [
                     'email' => new Str($credentials['email']),
                     'password' => new Str($credentials['password']),
                 ];
+                $this->method = 'email';
+
                 break;
 
             // Telefon girişi
             case Validator::make($credentials, [
                 'phone' => 'required|string',
             ])->passes():
+
                 $this->fields = [
                     'phone' => new Phone($credentials['phone']),
                 ];
+                $this->method = 'phone';
+                
                 break;
 
             default:
