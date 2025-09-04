@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 
-class LoginRequest extends FormRequest
+class LoginByEmailRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -41,7 +41,8 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $authCredentialsObject = new AuthCredentialsObject($this->only('email', 'password'));
+        // E-posta - şifre girişi
+        $authCredentialsObject = new AuthCredentialsObject(method: 'email', $this->only('email', 'password'));
 
         $loginService = new LoginService();
         if (!$loginService->login($authCredentialsObject))
