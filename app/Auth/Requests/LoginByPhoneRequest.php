@@ -32,7 +32,7 @@ class LoginByPhoneRequest extends FormRequest
         $authCredentialsObject = new AuthCredentialsObject(method: 'phone', $this->only('phone'));
 
         $loginService = new LoginService();
-        if (!$loginService->login($authCredentialsObject))
+        if (!$loginService->loginWithPhone($authCredentialsObject))
         {
             RateLimiter::hit($this->throttleKey());
         }

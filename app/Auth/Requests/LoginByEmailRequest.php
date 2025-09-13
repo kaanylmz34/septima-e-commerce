@@ -27,7 +27,7 @@ class LoginByEmailRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -45,7 +45,7 @@ class LoginByEmailRequest extends FormRequest
         $authCredentialsObject = new AuthCredentialsObject(method: 'email', $this->only('email', 'password'));
 
         $loginService = new LoginService();
-        if (!$loginService->login($authCredentialsObject))
+        if (!$loginService->loginWithEmail($authCredentialsObject))
         {
             RateLimiter::hit($this->throttleKey());
 

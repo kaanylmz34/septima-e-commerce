@@ -15,33 +15,30 @@ class AuthCredentialsObject extends DataObject
 
     public string $method;
 
-    public function __construct(string $method, ...$credentials) 
+    public function __construct(string $method, array $credentials) 
     {
 
         switch (true)
         {
             // E-posta - şifre girişi
-            case $method === 'email' && Validator::make($credentials, [
-                'email' => 'required|string',
-                'password' => 'required|string',
-            ])->passes():
+            case $method === 'email':
             
                 $this->fields = [
                     'email' => new Str($credentials['email']),
                     'password' => new Str($credentials['password']),
                 ];
+                
                 $this->method = $method;
 
                 break;
 
             // Telefon girişi
-            case $method === 'phone' && Validator::make($credentials, [
-                'phone' => 'required|string',
-            ])->passes():
+            case $method === 'phone':
 
                 $this->fields = [
                     'phone' => new Phone($credentials['phone']),
                 ];
+
                 $this->method = $method;
                 
                 break;
