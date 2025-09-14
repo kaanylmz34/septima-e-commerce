@@ -9,9 +9,7 @@ class LoginLockedOutEvent
 {
     use Dispatchable;
 
-    public $primaryCredential;
-
-    public function __construct(string $primaryCredential)
+    public function __construct(public string $primaryCredential)
     {
         $this->primaryCredential = $primaryCredential;
     }

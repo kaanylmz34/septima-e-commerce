@@ -130,22 +130,26 @@
             <table class="min-w-full divide-y divide-slate-700 border border-slate-700 mt-5">
                 <thead class="bg-slate-800">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Listener Adı</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Olay Adı</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Açıklama</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-700 bg-slate-900">
                     <tr>
-                        <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">BeforeLoginEvent</td>
+                        <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">BeforeLoginEvent($authCredentials)</td>
                         <td class="whitespace-nowrap px-6 py-4 text-sm text-slate-300">Kullanıcı giriş yapmadan önce tetiklenen olaydır.</td>
                     </tr>
                     <tr>
-                        <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">AfterLoginEvent</td>
+                        <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">AfterLoginEvent($authCredentials, $status)</td>
                         <td class="whitespace-nowrap px-6 py-4 text-sm text-slate-300">Kullanıcı giriş yaptıktan sonra tetiklenen olaydır.</td>
                     </tr>
                     <tr>
-                        <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">LoginLockedOutEvent</td>
+                        <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">LoginLockedOutEvent($authCredentials)</td>
                         <td class="whitespace-nowrap px-6 py-4 text-sm text-slate-300">Kullanıcı çok sayıda başarısız giriş denemesi yaptıktan sonra kilitlendiğinde tetiklenen olaydır.</td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">OtpGeneratedEvent($phone, $otp)</td>
+                        <td class="whitespace-nowrap px-6 py-4 text-sm text-slate-300">Kullanıcı telefon numarası ile giriş yaparken OTP (tek kullanımlık şifre) oluşturulduğunda tetiklenen olaydır.</td>
                     </tr>
                 </tbody>
             </table>
@@ -157,7 +161,7 @@
             <table class="min-w-full divide-y divide-slate-700 border border-slate-700 mt-5">
                 <thead class="bg-slate-800">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Listener Adı</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Dinleyici Adı</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Olay Adı</th>
                         <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Açıklama</th>
                     </tr>
@@ -167,6 +171,11 @@
                         <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">AuditLoginAttemptListener</td>
                         <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">BeforeLoginEvent</td>
                         <td class="whitespace-nowrap px-6 py-4 text-sm text-slate-300">Kullanıcı giriş denemelerini denetleyen dinleyicidir.</td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">SendSmsAfterOtpGeneratedListener</td>
+                        <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">OtpGeneratedEvent</td>
+                        <td class="whitespace-nowrap px-6 py-4 text-sm text-slate-300">Kullanıcı telefon numarası ile giriş yaparken OTP (tek kullanımlık şifre) oluşturulduktan sonra SMS gönderen dinleyicidir.</td>
                     </tr>
                 </tbody>
             </table>

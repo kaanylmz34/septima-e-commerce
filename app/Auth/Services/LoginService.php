@@ -6,6 +6,7 @@ use App\Auth\Objects\AuthCredentialsObject;
 use App\Auth\Events\BeforeLoginEvent;
 use App\Auth\Events\AfterLoginEvent;
 use App\Auth\Events\LoginLockedOutEvent;
+use App\Auth\Events\OtpGeneratedEvent;
 use Illuminate\Support\Facades\Auth;
 use App\User\Models\User;
 
@@ -15,6 +16,7 @@ class LoginService
     public function __construct(
         public $fails = 0,
         public $locked = false,
+        private $otp = null,
     )
     {
         // Başlatıcı
@@ -23,6 +25,9 @@ class LoginService
 
         if (request()->session()->has('login_locked'))
             $this->locked = request()->session()->get('login_locked');
+
+        if (request()->session()->has('otp'))
+            $this->otp = request()->session()->get('otp');
     }
 
     public function loginWithEmail(AuthCredentialsObject $c)
@@ -93,6 +98,55 @@ class LoginService
         event(new AfterLoginEvent($c, $ok));
 
         return $authCredentialsObject;
+    }
+
+    public function generateOtpForPhoneLogin(AuthCredentialsObject $c): int
+    {
+        // 6 haneli OTP oluştur
+        $otp = rand(100000, 999999);
+        $otpHash = hash_hmac('sha256', $otp, config('app.key'));
+
+        // OTP'yi oturumda sakla
+        request()->session()->put('otp_hash', $otpHash);
+        request()->session()->put('otp_phone', (string)$c->phone);
+        request()->session()->put('otp_generated_at', now());
+        request()->session()->put('otp_expires_at', now()->addMinutes(5));
+        request()->session()->put('otp_attempts', 0);
+
+        event(new OtpGeneratedEvent($c->phone, $otp));
+
+        return $otp;
+    }
+
+    public function verifyOtpForPhoneLogin(string $incomingOtp): bool
+    {
+        $session = request()->session();
+
+        $expiresAt = $session->get('otp_expires_at');
+        $phone = $session->get('otp_phone');
+        $otpHash = $session->get('otp_hash');
+        $attempts = (int) $session->get('otp_attempts', 0);
+
+        if (!$otpHash || !$expiresAt || now()->gte($expiresAt))
+            return false; // yok ya da süresi dolmuş
+
+        if ($attempts >= 5)
+            return false; // çok fazla deneme
+
+        $calc = hash_hmac('sha256', (string) $incomingOtp, config('app.key'));
+        $match = hash_equals($otpHash, $calc);
+
+        // Attempt sayacı güncelle
+        $session->put('otp_attempts', $attempts + 1);
+
+        if ($match) 
+        {
+            // Başarılı: OTP state temizle
+            $session->forget(['otp_hash', 'otp_phone', 'otp_generated_at', 'otp_expires_at', 'otp_attempts']);
+            return true;
+        }
+
+        return false;
     }
 
     public function isLocked(): bool

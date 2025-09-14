@@ -9,12 +9,10 @@ class AfterLoginEvent
 {
     use Dispatchable;
 
-    public $authCredentials;
-    public $status;
-    
-    public function __construct(AuthCredentialsObject $authCredentials, bool $status)
+    public function __construct(
+        public AuthCredentialsObject $authCredentials, 
+        public bool $status
+    )
     {
-        $this->authCredentials = $authCredentials;
-        $this->status = $status;
     }
 }

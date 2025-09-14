@@ -9,10 +9,7 @@ class BeforeLoginEvent
 {
     use Dispatchable;
 
-    public $authCredentials;
-
-    public function __construct(AuthCredentialsObject $authCredentials)
+    public function __construct(public AuthCredentialsObject $authCredentials)
     {
-        $this->authCredentials = $authCredentials;
     }
 }
