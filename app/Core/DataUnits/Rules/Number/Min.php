@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\DataUnits\Rules\Str;
+namespace App\Core\DataUnits\Rules\Number;
 
 use App\Core\DataUnits\Rules\Rule;
 
@@ -11,12 +11,12 @@ class Min extends Rule
 
     public function __construct(private int $min, ?string $errorMessage = null)
     {
-        $this->errorMessage = $errorMessage ?? sprintf('The string must be greater than %d characters', $this->min);
+        $this->errorMessage = $errorMessage ?? sprintf('The number must be greater than %d', $this->min);
     }
 
     public function isValid(mixed $value): bool
     {
-        return strlen($value) >= $this->min;
+        return $value > $this->min;
     }
     
 }

@@ -81,23 +81,29 @@ class LoginService
         {
             throw new \Exception('User not found');
         }
-        
-        $ok = Auth::login($user);
 
-        if (!$ok)
+        try
+        {
+            $this->verifyOtpForPhoneLogin((string)$c->otp);
+            
+            $ok = Auth::login($user);
+
+            return $authCredentialsObject;
+        }
+        catch (\Exception $e)
         {
             $fails = $this->recordFailure($phone);
             $locked = $this->maybeLock($phone, $fails);
 
             if ($locked)
                 event(new LoginLockedOutEvent($phone));
+
+            throw $e;
         }
-        else
-            $this->clearFailureState($phone);
-
-        event(new AfterLoginEvent($c, $ok));
-
-        return $authCredentialsObject;
+        finally
+        {
+            event(new AfterLoginEvent($c, $ok ?? false));
+        }
     }
 
     public function generateOtpForPhoneLogin(AuthCredentialsObject $c): int
@@ -127,11 +133,19 @@ class LoginService
         $otpHash = $session->get('otp_hash');
         $attempts = (int) $session->get('otp_attempts', 0);
 
+        // ERR_2000: OTP expired or not generated
         if (!$otpHash || !$expiresAt || now()->gte($expiresAt))
-            return false; // yok ya da süresi dolmuş
+        {
+            throw new \Exception('OTP expired or not generated', 2000);
+            return false;
+        }
 
+        // ERR_2001: Too many attempts
         if ($attempts >= 5)
-            return false; // çok fazla deneme
+        {
+            throw new \Exception('Too many attempts', 2001);
+            return false;
+        }
 
         $calc = hash_hmac('sha256', (string) $incomingOtp, config('app.key'));
         $match = hash_equals($otpHash, $calc);

@@ -8,7 +8,6 @@ class Regex extends Rule
 {
 
     protected string $errorMessage;
-    protected mixed $value;
     protected string $pattern;
 
     public function __construct(string $pattern, ?string $errorMessage = null)

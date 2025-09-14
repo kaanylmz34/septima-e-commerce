@@ -5,6 +5,7 @@ namespace App\Auth\Objects;
 use App\Core\DataUnits\Str;
 use App\Core\DataUnits\Phone;
 use App\Auth\DataUnits\Password;
+use App\Auth\DataUnits\OTP;
 use App\Core\DataObject;
 use Illuminate\Support\Facades\Validator;
 
@@ -37,6 +38,7 @@ class AuthCredentialsObject extends DataObject
 
                 $this->fields = [
                     'phone' => new Phone($credentials['phone']),
+                    'otp' => new OTP($credentials['otp']),
                 ];
 
                 $this->method = $method;
