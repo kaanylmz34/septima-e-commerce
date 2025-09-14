@@ -5,10 +5,10 @@ namespace App\Auth\Listeners;
 use App\Auth\Events\BeforeLoginEvent;
 use Illuminate\Support\Facades\Log;
 
-class LoginAttemptAuditListener
+class AuditLoginAttemptListener
 {
     public function handle(BeforeLoginEvent $event)
     {
-        Log::info('Login attempt via ' . $event->authCredentialsObject->method . ' method from this IP address: ' . request()->ip());
+        Log::info('Login attempt via ' . $event->authCredentials->method . ' method from this IP address: ' . request()->ip());
     }
 }

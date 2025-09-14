@@ -10,11 +10,11 @@ Route::get('/', function () {
     try
     {
         $loginService = new LoginService();
-        $credentials = [
+        $c = [
             'phone' => '+905555555555',
         ];
-        $authCredentialsObject = new AuthCredentialsObject('phone', $credentials);
-        $loginService->login($authCredentialsObject);
+        $authCredentialsObject = new AuthCredentialsObject(method: 'phone', credentials: $c);
+        $loginService->loginWithPhone($authCredentialsObject);
     }
     catch (\Exception $e)
     {

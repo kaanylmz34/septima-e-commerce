@@ -30,9 +30,9 @@ class LoginService
         $email = (string)$c->email;
         $password = (string)$c->password;
 
-        if ($this->locked()) 
+        if ($this->isLocked()) 
         {
-            event(new LoginLockedOutEvent($email))
+            event(new LoginLockedOutEvent($email));
             return false;
         }
 
@@ -63,7 +63,7 @@ class LoginService
     {
         $phone = (string)$c->phone;
 
-        if ($this->locked()) 
+        if ($this->isLocked()) 
         {
             event(new LoginLockedOutEvent($phone));
             return false;
@@ -95,7 +95,7 @@ class LoginService
         return $authCredentialsObject;
     }
 
-    public function isLocked(string $credentials): bool
+    public function isLocked(): bool
     {
         // Locking durumu (service katmanı)
         return $this->locked;
